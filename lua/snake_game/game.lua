@@ -138,13 +138,13 @@ local function get_input(use_wasd, use_arrow_keys, game_over)
         -- Arrow keys
     elseif input == "\27" and use_arrow_keys then
         local seq = io.read(2) -- Lê os próximos dois caracteres para teclas de seta
-        if seq == "k" then
+        if seq == "[A" then
             return "up"
-        elseif seq == "j" then
+        elseif seq == "[B" then
             return "down"
-        elseif seq == "l" then
+        elseif seq == "[C" then
             return "right"
-        elseif seq == "h" then
+        elseif seq == "[D" then
             return "left"
         end
     elseif input == "r" and game_over then

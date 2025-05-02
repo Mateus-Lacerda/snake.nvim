@@ -1,7 +1,6 @@
--- devolve diretório onde o script está salvo
-local script_dir = debug.getinfo(1, "S").source:sub(2):match("(.*/)")
-local CONFIG     = script_dir .. "config.txt"
-local HIGHSCORE  = script_dir .. "highscore.txt"
+local CONFIG     = os.getenv("SNAKE_CFG") or (debug.getinfo(1,"S").source:sub(2):match("(.*/)") .. "config.txt")
+local HIGHSCORE  = os.getenv("SNAKE_HS")  or (debug.getinfo(1,"S").source:sub(2):match("(.*/)") .. "highscore.txt")
+
 
 -- Description: This function clears the terminal screen.
 local function clear()

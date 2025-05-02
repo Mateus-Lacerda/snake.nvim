@@ -165,8 +165,8 @@ end
 
 local function check_collision(game_state, inpt, game_over)
     if game_state.player.x < 1 then
-        game_state.player.x = 41
-    elseif game_state.player.x > 41 then
+        game_state.player.x = 42
+    elseif game_state.player.x > 42 then
         game_state.player.x = 1
     end
     if game_state.player.y < 1 then

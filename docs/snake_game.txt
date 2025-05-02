@@ -62,16 +62,13 @@ All keys are optional; omitted → default (false).
 ==============================================================================
 DETAILED OPTIONS                                               *snake-game-options*
 
-                                 *nerd_font*
 *nerd_font*       Boolean (default: *false*)  
         If *true* the game uses NerdFont icons for head/tail (@, , 󱓻, ).
         Requires a NerdFont‑enabled terminal.
 
-                                 *use_wasd*
 *use_wasd*        Boolean (default: *false*)  
         Allows moving the snake with *WASD* in addition to *hjkl*.
 
-                                 *use_arrow_keys*
 *use_arrow_keys*  Boolean (default: *false*)  
         Allows moving the snake with ←↓↑→ (raw mode terminal input).
 

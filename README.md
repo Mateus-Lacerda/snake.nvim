@@ -24,7 +24,7 @@ This is a simple Snake Game plugin for Neovim. It allows you to play a classic s
 
 ```lua
 {
-    'Mateus-Lacerda/snake-game',
+    'Mateus-Lacerda/snake.nvim',
     config = function()
         require('snake_game').setup({
             nerd_font = true, -- Set to false if you don't want to use Nerd Fonts
@@ -37,7 +37,7 @@ This is a simple Snake Game plugin for Neovim. It allows you to play a classic s
 
 ```lua
 use {
-    'Mateus-Lacerda/snake-game',
+    'Mateus-Lacerda/snake.nvim',
     config = function()
         require('snake_game').setup({
             nerd_font = true, -- Set to false if you don't want to use Nerd Fonts

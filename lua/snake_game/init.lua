@@ -1,12 +1,29 @@
 local M = {}
 
--- 1. ache o game.lua dentro da runtimepath
-local game_path = vim.api.nvim_get_runtime_file("lua/snake_game/game.lua", false)[1]
-local game_dir  = vim.fn.fnamemodify(game_path, ":h")
+-----------------------------------------------------------------------
+-- LOCAL PATH HELPERS -------------------------------------------------
+-----------------------------------------------------------------------
+local function runtime_file(path)
+  local files = vim.api.nvim_get_runtime_file(path, false)
+  return (#files > 0) and files[1] or nil
+end
 
--- 2. pasta do usuário para configs/saves
-local user_dir  = vim.fn.stdpath("state") .. "/snake_game"
-vim.fn.mkdir(user_dir, "p")   -- cria se não existir
+local game_path = runtime_file("lua/snake_game/game.lua")
+assert(game_path, "snake_game/game.lua not found in runtimepath")
+
+-- dirname that works on all OS
+local game_dir = vim.fn.fnamemodify(game_path, ":h")
+
+-- folder to store user files (config / highscore)
+local state_base = vim.fn.stdpath("state")
+if state_base == "" or not vim.loop.fs_stat(state_base) then
+  state_base = vim.fn.stdpath("data")  -- fallback for Neovim 0.9
+end
+local user_dir = state_base .. "/snake_game"
+vim.fn.mkdir(user_dir, "p")            -- "p" = create parents
+
+local CONFIG_FILE   = user_dir .. "/config.txt"
+local HIGHSCORE_FILE= user_dir .. "/highscore.txt"
 
 -----------------------------------------------------------------------
 -- FLOATING TERMINAL --------------------------------------------------
@@ -15,7 +32,7 @@ local function create_floating_terminal()
   local buf = vim.api.nvim_create_buf(false, true)
 
   local cols, lines = vim.o.columns, vim.o.lines
-  local width  = math.floor(cols  * 0.8)
+  local width  = math.floor(cols * 0.8)
   local height = math.floor(lines * 0.8)
   local row    = math.floor((lines - height) / 2)
   local col    = math.floor((cols  - width)  / 2)
@@ -32,13 +49,13 @@ local function create_floating_terminal()
 
   vim.api.nvim_set_current_win(win)
 
-  -- cwd = game_dir (ex.: ~/.local/share/nvim/lazy/snake.nvim/lua/snake_game)
+  -- agora garantido: game_dir é um diretório válido
   vim.fn.jobstart({ "lua", game_path }, {
     cwd  = game_dir,
     term = true,
-    env  = {            -- passa caminhos de usuário para o script lua
-      SNAKE_CFG = user_dir .. "/config.txt",
-      SNAKE_HS  = user_dir .. "/highscore.txt",
+    env  = {
+      SNAKE_CFG = CONFIG_FILE,
+      SNAKE_HS  = HIGHSCORE_FILE,
     },
   })
 
@@ -50,10 +67,9 @@ end
 -- CONFIG -------------------------------------------------------------
 -----------------------------------------------------------------------
 function M.setup(cfg)
-  local path = user_dir .. "/config.txt"
-  local f = io.open(path, "w")
+  local f = io.open(CONFIG_FILE, "w")
   if not f then
-    vim.notify("SnakeGame: cannot write " .. path, vim.log.levels.ERROR)
+    vim.notify("SnakeGame: cannot write " .. CONFIG_FILE, vim.log.levels.ERROR)
     return
   end
   for k, v in pairs(cfg or {}) do
@@ -67,3 +83,4 @@ function M.start_game()
 end
 
 return M
+

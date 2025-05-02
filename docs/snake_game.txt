@@ -1,0 +1,115 @@
+*snake_game.txt*                snake‑game.nvim ‑‑ Version 1.0.0     2025‑05‑02
+
+==============================================================================
+INTRODUCTION                                                    *snake-game*
+
+snake‑game.nvim is a tiny text‑based “Snake” game that runs inside a floating
+window in Neovim ≥ 0.9.  Perfect to kill time while long builds finish.  A local
+high‑score is stored in
+{config}/lua/snake_game/highscore.txt.
+
+Main command: |:SnakeGame|
+
+==============================================================================
+INSTALLATION                                                   *snake-game-install*
+
+With *lazy.nvim* (example) >
+
+    {
+      "Mateus-Lacerda/snake-game.nvim",
+      cmd = "SnakeGame",
+    }
+
+With *packer.nvim* >
+
+    use {
+      "Mateus-Lacerda/snake-game.nvim",
+      cmd = "SnakeGame",
+    }
+
+After cloning, make Neovim index the docs once: >
+
+    :helptags <path-to-doc>
+
+==============================================================================  
+COMMAND                                                          *:SnakeGame*
+
+                            *snake-game-command*
+:SnakeGame [options]
+        Opens the game in a floating window.  *options* are `key=value`
+        pairs separated by spaces.  Example: >
+            :SnakeGame nerd_font=true use_wasd=true
+<
+Recognised options (can be given here or via |snake-game-setup|):
+
+|nerd_font|         use NerdFont glyphs for snake/apple  
+|use_wasd|          enable WASD in addition to hjkl  
+|use_arrow_keys|    enable ←↓↑→ keys
+
+==============================================================================
+LUA CONFIGURATION                                              *snake-game-setup*
+
+You may set defaults in your *init.lua* or plugin manager:
+
+>   require("snake_game").setup({
+>     nerd_font      = true,
+>     use_wasd       = false,
+>     use_arrow_keys = true,
+>   })
+<
+All keys are optional; omitted → default (false).
+
+==============================================================================
+DETAILED OPTIONS                                               *snake-game-options*
+
+                                 *nerd_font*
+*nerd_font*       Boolean (default: *false*)  
+        If *true* the game uses NerdFont icons for head/tail (@, , 󱓻, ).
+        Requires a NerdFont‑enabled terminal.
+
+                                 *use_wasd*
+*use_wasd*        Boolean (default: *false*)  
+        Allows moving the snake with *WASD* in addition to *hjkl*.
+
+                                 *use_arrow_keys*
+*use_arrow_keys*  Boolean (default: *false*)  
+        Allows moving the snake with ←↓↑→ (raw mode terminal input).
+
+==============================================================================
+INGAME CONTROLS                                                *snake-game-keys*
+
+    h / j / k / l        move left / down / up / right
+    (optional) WASD      move if |use_wasd|=true
+    (optional) ←↓↑→      move if |use_arrow_keys|=true
+    q                    quit and save high‑score
+    r                    restart after “Game Over”
+
+==============================================================================
+FILES                                                          *snake-game-files*
+
+{config}/lua/snake_game/config.txt       Preferences (key=value).  
+{config}/lua/snake_game/highscore.txt    Highest score (integer).
+
+`{config}` is the path returned by |stdpath()| with `"config"`.
+
+==============================================================================
+LICENSE & CONTRIBUTING                                        *snake-game-license*
+
+snake‑game.nvim is released under the MIT License (see LICENSE).  
+Contributions, issues and PRs are welcome at
+<https://github.com/Mateus-Lacerda/snake-game.nvim>.
+
+==============================================================================
+CHANGELOG                                                     *snake-game-changelog*
+
+v1.0.0   2025‑05‑02  First public release.
+
+==============================================================================
+REFERENCES                                                     *snake-game-ref*
+
+Vim help‑file guidelines:  |write-local-help| |help-writing|
+Terminal jobs:            |jobstart()| |:terminal| |nvim_open_win()|
+
+==============================================================================
+vim:tw=78:ts=8:ft=help:norl:
+

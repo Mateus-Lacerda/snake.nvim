@@ -1,5 +1,5 @@
-local CONFIG     = os.getenv("SNAKE_CFG") or (debug.getinfo(1,"S").source:sub(2):match("(.*/)") .. "config.txt")
-local HIGHSCORE  = os.getenv("SNAKE_HS")  or (debug.getinfo(1,"S").source:sub(2):match("(.*/)") .. "highscore.txt")
+local CONFIG    = os.getenv("SNAKE_CFG") or (debug.getinfo(1, "S").source:sub(2):match("(.*/)") .. "config.txt")
+local HIGHSCORE = os.getenv("SNAKE_HS") or (debug.getinfo(1, "S").source:sub(2):match("(.*/)") .. "highscore.txt")
 
 
 -- Description: This function clears the terminal screen.
@@ -8,11 +8,11 @@ local function clear()
 end
 
 function table.shallow_copy(t)
-  local t2 = {}
-  for k,v in pairs(t) do
-    t2[k] = v
-  end
-  return t2
+    local t2 = {}
+    for k, v in pairs(t) do
+        t2[k] = v
+    end
+    return t2
 end
 
 local function print_menu(score, nerd_font, highscore)
@@ -42,8 +42,12 @@ local function print_grid(game_state, nerd_font, game_over, highscore)
     clear()
     print_menu(game_state.player_size, nerd_font, highscore)
     -- print(string.format("+%s+", string.rep('-', 36)))
-    local boundary = {"+", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "+",}
-    local line = {"|", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", "|",}
+    local boundary = { "+", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-",
+        "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-",
+        "+", }
+    local line = { "|", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ",
+        " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ",
+        "|", }
     local grid = {
         boundary,
         table.shallow_copy(line),
@@ -113,7 +117,7 @@ local function get_input(use_wasd, use_arrow_keys, game_over)
 
     if input == "q" then
         return input
-    -- Vim-like keys
+        -- Vim-like keys
     elseif input == "k" then
         return "up"
     elseif input == "j" then
@@ -122,7 +126,7 @@ local function get_input(use_wasd, use_arrow_keys, game_over)
         return "right"
     elseif input == "h" then
         return "left"
-    -- wasd
+        -- wasd
     elseif input == "w" and use_wasd then
         return "up"
     elseif input == "s" and use_wasd then
@@ -131,7 +135,7 @@ local function get_input(use_wasd, use_arrow_keys, game_over)
         return "right"
     elseif input == "a" and use_wasd then
         return "left"
-    -- Arrow keys
+        -- Arrow keys
     elseif input == "\27" and use_arrow_keys then
         local seq = io.read(2) -- Lê os próximos dois caracteres para teclas de seta
         if seq == "k" then
@@ -284,7 +288,7 @@ local function main()
         end
         handle_movement(game_state, inpt)
         game_over = check_collision(game_state, inpt, game_over)
-    ::continue::
+        ::continue::
     end
 end
 

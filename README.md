@@ -12,10 +12,10 @@ This is a simple Snake Game plugin for Neovim. It allows you to play a classic s
     - Use the arrow keys if you're a quitter.
     - Use `q` to quit the game.
 
-[!NOTE]
-    [Nerd Fonts](https://www.nerdfonts.com/) are recommended for better visuals, but not required.
-    To play without Nerd Fonts, you need to set the `nerd_font` option to `false` in the configuration.
-    To use wasd keys, you need to set the `wasd` option to `true` in the configuration.
+> [!NOTE]
+    [Nerd Fonts](https://www.nerdfonts.com/) are recommended for better visuals, but not required. \
+    To play without Nerd Fonts, you need to set the `nerd_font` option to `false` in the configuration. \
+    To use wasd keys, you need to set the `wasd` option to `true` in the configuration. \
     To use arrow keys, you need to set the `arrow_keys` option to `true` in the configuration.
 
 ## Installation

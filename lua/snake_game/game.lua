@@ -110,9 +110,31 @@ local function reset_mode()
     os.execute("stty sane") -- Restaura o terminal para o estado padrão
 end
 
-local function get_input(use_wasd, use_arrow_keys, game_over)
+local function get_input(use_wasd, use_arrow_keys, game_over, current_direction, multiplier)
     set_raw_mode()
-    local input = io.read(1) -- Lê um único caractere
+
+    local base_timeout = 0.1
+    if game_over then
+        base_timeout = 0.5
+    end
+    if current_direction == "up" or current_direction == "down" then
+        base_timeout = 0.18
+    end
+    if multiplier then
+        base_timeout = base_timeout * multiplier
+    end
+    -- Lê a entrada do usuário com timeout
+    local handle = io.popen("read -t " .. base_timeout .. " -n 1 input && echo \"$input\"")
+    if not handle then
+        print("Error: Could not open process.")
+        return nil
+    end
+    local input = handle:read("*a") -- Lê a saída do comando
+    handle:close()
+
+    -- Remove possível newline e verifica se há entrada
+    input = input and input:match("^%s*(.-)%s*$") or nil
+
     reset_mode()
 
     if input == "q" then
@@ -137,7 +159,15 @@ local function get_input(use_wasd, use_arrow_keys, game_over)
         return "left"
         -- Arrow keys
     elseif input == "\27" and use_arrow_keys then
-        local seq = io.read(2) -- Lê os próximos dois caracteres para teclas de seta
+        -- Tenta ler os próximos 2 caracteres com timeout
+        handle = io.popen("read -t " .. base_timeout .. " -n 1 input && echo \"$input\"")
+        if not handle then
+            print("Error: Could not open process.")
+            return nil
+        end
+        local seq = handle:read("*a")
+        handle:close()
+        seq = seq and seq:match("^%s*(.-)%s*$") or nil
         if seq == "[A" then
             return "up"
         elseif seq == "[B" then
@@ -150,9 +180,9 @@ local function get_input(use_wasd, use_arrow_keys, game_over)
     elseif input == "r" and game_over then
         return input
     end
-    return nil -- Retorna nil para entradas não correspondentes
-end
 
+    return nil -- Retorna nil para entradas não correspondentes ou timeout
+end
 local function update_tail(game_state, inpt)
     if inpt == nil then
         return
@@ -195,6 +225,7 @@ local function init_game_state()
         player = { x = 1, y = 1 },
         player_size = 1,
         player_tail = {},
+        current_direction = "right",
         apple = { x = math.random(1, 36), y = math.random(1, 18) },
     }
 end
@@ -266,12 +297,20 @@ local function main()
     local use_wasd = config.use_wasd or false
     local use_arrow_keys = config.use_arrow_keys or false
     local nerd_font = config.nerd_font or true
+    local speed = config.speed or 1
+    speed = 1 / speed
     local game_over = false
     local highscore = load_highscore()
 
     while true do
         print_grid(game_state, nerd_font, game_over, highscore)
-        local inpt = get_input(use_wasd, use_arrow_keys, game_over)
+        local inpt = get_input(use_wasd, use_arrow_keys, game_over, game_state.current_direction, speed)
+        if inpt == nil then
+            inpt = game_state.current_direction
+        else
+            game_state.current_direction = inpt
+        end
+
         if inpt == "q" then
             save_highscore(game_state.player_size)
             print("Exiting...")

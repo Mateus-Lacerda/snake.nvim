@@ -45,6 +45,7 @@ Recognised options (can be given here or via |snake-game-setup|):
 |nerd_font|         use NerdFont glyphs for snake/apple  
 |use_wasd|          enable WASD in addition to hjkl  
 |use_arrow_keys|    enable ←↓↑→ keys
+|speed|             set different game speeds
 
 ==============================================================================
 LUA CONFIGURATION                                              *snake-game-setup*
@@ -55,6 +56,7 @@ You may set defaults in your *init.lua* or plugin manager:
 >     nerd_font      = true,
 >     use_wasd       = false,
 >     use_arrow_keys = true,
+>     speed          = 2,
 >   })
 <
 All keys are optional; omitted → default (false).
